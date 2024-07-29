@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +38,8 @@ class ListOfMatches : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val db = MainDataBase.createDateBase(requireContext())
+
         binding.btnChangeView.setOnClickListener {
            isGridLayoutManager = !isGridLayoutManager
             if(isGridLayoutManager){
@@ -46,35 +49,51 @@ class ListOfMatches : Fragment() {
             }
         }
 
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://fixturedownload.com/feed/json/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        //Получение данных с API:
         val aPIRetrofit = retrofit.create(APIRetrofit::class.java)
 
-        aPIRetrofit.getMatches().enqueue(object : Callback<List<MatchDetails>> {
-            override fun onResponse(call: Call<List<MatchDetails>>, response: Response<List<MatchDetails>>) {
-                if (response.isSuccessful) {
-                    val matches = response.body()
+            aPIRetrofit.getMatches().enqueue(object : Callback<List<MatchDetails>> {
+                override fun onResponse(
+                    call: Call<List<MatchDetails>>,
+                    response: Response<List<MatchDetails>>
+                ) {
+                    if (response.isSuccessful) {
+                        val matches = response.body()
 
-                    matchAdapter = MatchAdapter()
-                    matchAdapter.setItem(matches!!)
+                        //Работа с RecyclerView:
 
-                    recyclerView = binding.recyclerView
+                        matchAdapter = MatchAdapter()
+                        matchAdapter.setItem(matches!!)
 
-                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                        recyclerView = binding.recyclerView
 
-                    recyclerView.adapter = matchAdapter
-                } else {
-                    Log.d("MyL","Ошибка: ${response.errorBody()?.string()}")
+                        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+                        recyclerView.adapter = matchAdapter
+
+
+                        Thread {
+                            //Добавление записей в базу данных:
+
+                            for (i in matches.indices) {
+                                MainDataBase.getDataBase()?.matchDao()?.addMatch(matches[i])
+                            }
+                        }.start()
+
+                    } else {
+                        Log.d("MyL", "Ошибка: ${response.errorBody()?.string()}")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<List<MatchDetails>>, t: Throwable) {
-                Log.d("MyL","Ошибка сети: ${t.message}")
-            }
-        })
-
-    }
-    }
+                override fun onFailure(call: Call<List<MatchDetails>>, t: Throwable) {
+                    Log.d("MyL", "Ошибка сети: ${t.message}")
+                }
+            })
+        }
+        }

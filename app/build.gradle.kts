@@ -3,6 +3,7 @@ import kotlinx.coroutines.coroutineScope
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -43,6 +44,11 @@ android {
 dependencies {
     val nav_version = "2.7.7"
 
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
@@ -51,6 +57,8 @@ dependencies {
 
     implementation ("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("androidx.cardview:cardview:1.0.0")
+
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
 
     //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
     //implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
