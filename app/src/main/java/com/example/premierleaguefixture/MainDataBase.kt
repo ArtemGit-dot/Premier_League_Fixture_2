@@ -11,7 +11,7 @@ abstract class MainDataBase : RoomDatabase() {
     abstract fun matchDao(): Dao
 
     companion object {
-        private var INSTANCE: MainDataBase? = null
+       /* private var INSTANCE: MainDataBase? = null
         fun createDateBase(context: Context): Boolean {
             if (INSTANCE == null) {
                 synchronized(this) {
@@ -26,6 +26,6 @@ abstract class MainDataBase : RoomDatabase() {
             return false
         }
 
-        fun getDataBase(): MainDataBase? = INSTANCE
+        fun getDataBase(): MainDataBase? = INSTANCE*/
     }
 }

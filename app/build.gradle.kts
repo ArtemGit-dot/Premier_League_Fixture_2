@@ -60,6 +60,10 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
 
+    implementation("io.insert-koin:koin-android:3.5.6")
+    implementation("io.insert-koin:koin-core:3.5.6")
+
+
     //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
     //implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
    // implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")

@@ -13,4 +13,7 @@ interface Dao {
 
     @Query("SELECT * FROM matchDetails")
     fun getAllMatches() : Flow<List<MatchDetails>>
+
+    @Query("DELETE FROM matchDetails")
+    fun deleteAllMatches()
 }

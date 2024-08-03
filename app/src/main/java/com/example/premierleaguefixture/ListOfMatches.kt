@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.premierleaguefixture.databinding.FragmentListOfMatchesBinding
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,8 +39,6 @@ class ListOfMatches : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val db = MainDataBase.createDateBase(requireContext())
-
         binding.btnChangeView.setOnClickListener {
            isGridLayoutManager = !isGridLayoutManager
             if(isGridLayoutManager){
@@ -48,12 +47,11 @@ class ListOfMatches : Fragment() {
                 recyclerView.layoutManager = LinearLayoutManager(requireContext())
             }
         }
+//Добавление зависимости Koin:
+        val retrofit: Retrofit by inject()
 
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://fixturedownload.com/feed/json/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+//Добавление зависимости Koin:
+        val db: MainDataBase by inject()
 
         //Получение данных с API:
         val aPIRetrofit = retrofit.create(APIRetrofit::class.java)
@@ -82,7 +80,7 @@ class ListOfMatches : Fragment() {
                             //Добавление записей в базу данных:
 
                             for (i in matches.indices) {
-                                MainDataBase.getDataBase()?.matchDao()?.addMatch(matches[i])
+                                db.matchDao()?.addMatch(matches[i])
                             }
                         }.start()
 
