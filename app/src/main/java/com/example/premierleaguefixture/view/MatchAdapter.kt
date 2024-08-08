@@ -1,13 +1,14 @@
-package com.example.premierleaguefixture
+package com.example.premierleaguefixture.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.premierleaguefixture.R
+import com.example.premierleaguefixture.model.data.MatchDetails
 
-class MatchAdapter: RecyclerView.Adapter<MatchAdapter.MatchHolder>() {
+class MatchAdapter(val listener: Listener): RecyclerView.Adapter<MatchAdapter.MatchHolder>() {
     private var list: List<MatchDetails> = emptyList()
 
     fun setItem(newList: List<MatchDetails>){
@@ -20,10 +21,16 @@ class MatchAdapter: RecyclerView.Adapter<MatchAdapter.MatchHolder>() {
     }
 
     override fun onBindViewHolder(holder: MatchHolder, position: Int) {
-        val itemViewModel = list[position]
 
         holder.item1.text = "Номер матча: ${list[position].matchNumber.toString()}"
         holder.item2.text = "Дата: ${list[position].dateUtc}"
+        holder.item2.setOnClickListener{
+listener.onClick(position)
+        }
+    }
+
+    interface Listener{
+        fun onClick(position: Int)
     }
 
     override fun getItemCount(): Int = list.size

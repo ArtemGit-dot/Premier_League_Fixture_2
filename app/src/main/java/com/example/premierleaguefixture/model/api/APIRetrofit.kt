@@ -1,7 +1,7 @@
-package com.example.premierleaguefixture
+package com.example.premierleaguefixture.model.api
 
+import com.example.premierleaguefixture.model.data.MatchDetails
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.http.GET
 
 interface APIRetrofit {
