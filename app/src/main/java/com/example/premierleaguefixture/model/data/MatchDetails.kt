@@ -1,10 +1,13 @@
-package com.example.premierleaguefixture
+package com.example.premierleaguefixture.model.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
-import java.util.Date
 
+@Entity(tableName = "matchDetails")
 data class MatchDetails(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     @SerializedName("MatchNumber")
     val matchNumber : Int,
     @SerializedName("RoundNumber")
